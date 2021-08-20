@@ -1,0 +1,27 @@
+{
+    "name": "colaphp/session",
+    "description": "",
+    "license": "MIT",
+    "keywords": ["php","colaphp","session"],
+    "type": "library",
+    "require": {
+        "php": ">=5.6"
+    },
+    "autoload": {
+        "files": [
+            "src/helper.php"
+        ],
+        "psr-4": {
+            "Colaphp\\Session\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "authors": [
+        {
+            "name": "nydia87",
+            "email": "349196713@qq.com"
+        }
+    ]
+}
