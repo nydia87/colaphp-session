@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @contact  nydia87 <349196713@qq.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0
  */
+
 namespace Colaphp\Session\driver;
 
-use SessionHandlerInterface;
-
-class Memcache implements SessionHandlerInterface
+class Memcache implements \SessionHandlerInterface
 {
 	protected $handler;
 
@@ -50,9 +50,9 @@ class Memcache implements SessionHandlerInterface
 		// 建立连接
 		foreach ((array) $hosts as $i => $host) {
 			$port = isset($ports[$i]) ? $ports[$i] : $ports[0];
-			$this->config['timeout'] > 0 ?
-			$this->handler->addServer($host, $port, $this->config['persistent'], 1, $this->config['timeout']) :
-			$this->handler->addServer($host, $port, $this->config['persistent'], 1);
+			$this->config['timeout'] > 0
+			? $this->handler->addServer($host, $port, $this->config['persistent'], 1, $this->config['timeout'])
+			: $this->handler->addServer($host, $port, $this->config['persistent'], 1);
 		}
 
 		return true;

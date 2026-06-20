@@ -1,13 +1,15 @@
 <?php
+
 /**
  * @contact  nydia87 <349196713@qq.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0
  */
+
 namespace Colaphp\Session\driver;
 
-use SessionHandlerInterface;
+use Predis\Client;
 
-class Redis implements SessionHandlerInterface
+class Redis implements \SessionHandlerInterface
 {
 	/** @var \Redis */
 	protected $handler;
@@ -32,8 +34,8 @@ class Redis implements SessionHandlerInterface
 	 * 打开Session.
 	 * @param string $savePath
 	 * @param mixed $sessName
-	 * @throws Exception
 	 * @return bool
+	 * @throws Exception
 	 */
 	public function open($savePath, $sessName)
 	{
@@ -42,7 +44,7 @@ class Redis implements SessionHandlerInterface
 
 			// 建立连接
 			$func = $this->config['persistent'] ? 'pconnect' : 'connect';
-			$this->handler->$func($this->config['host'], $this->config['port'], $this->config['timeout']);
+			$this->handler->{$func}($this->config['host'], $this->config['port'], $this->config['timeout']);
 
 			if ($this->config['password'] != '') {
 				$this->handler->auth($this->config['password']);
@@ -59,7 +61,7 @@ class Redis implements SessionHandlerInterface
 					unset($this->config[$key]);
 				}
 			}
-			$this->handler = new \Predis\Client($this->config, $params);
+			$this->handler = new Client($this->config, $params);
 		} else {
 			throw new \LogicException('not support: redis');
 		}

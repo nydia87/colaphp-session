@@ -1,8 +1,10 @@
 <?php
+
 /**
  * @contact  nydia87 <349196713@qq.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0
  */
+
 namespace Colaphp\Session;
 
 class Session
@@ -189,7 +191,7 @@ class Session
 
 		if (! empty($config['type'])) {
 			// 读取session驱动
-			$class = strpos($config['type'], '\\') !== false ? $config['type'] : '\\Colaphp\\Session\\driver\\' . ucwords($config['type']);
+			$class = strpos($config['type'], '\\') !== false ? $config['type'] : '\Colaphp\Session\driver\\' . ucwords($config['type']);
 
 			// 检查驱动类
 			if (! class_exists($class) || ! session_set_save_handler(new $class($config))) {
@@ -239,7 +241,7 @@ class Session
 
 		if (strpos($name, '.')) {
 			// 二维数组赋值
-			list($name1, $name2) = explode('.', $name);
+			[$name1, $name2] = explode('.', $name);
 			if ($prefix) {
 				$_SESSION[$prefix][$name1][$name2] = $value;
 			} else {
@@ -308,7 +310,6 @@ class Session
 	 * session设置 下一次请求有效.
 	 * @param string $name session名称
 	 * @param mixed $value session值
-	 * @param null|string $prefix 作用域（前缀）
 	 */
 	public function flash($name, $value)
 	{
@@ -359,7 +360,7 @@ class Session
 				$this->delete($key, $prefix);
 			}
 		} elseif (strpos($name, '.')) {
-			list($name1, $name2) = explode('.', $name);
+			[$name1, $name2] = explode('.', $name);
 			if ($prefix) {
 				unset($_SESSION[$prefix][$name1][$name2]);
 			} else {
@@ -487,7 +488,7 @@ class Session
 
 		if (! empty($config['type']) && isset($config['use_lock']) && $config['use_lock']) {
 			// 读取session驱动
-			$class = strpos($config['type'], '\\') !== false ? $config['type'] : '\\Colaphp\\Session\\driver\\' . ucwords($config['type']);
+			$class = strpos($config['type'], '\\') !== false ? $config['type'] : '\Colaphp\Session\driver\\' . ucwords($config['type']);
 
 			// 检查驱动类及类中是否存在 lock 和 unlock 函数
 			if (class_exists($class) && method_exists($class, 'lock') && method_exists($class, 'unlock')) {

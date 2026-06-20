@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @contact  nydia87 <349196713@qq.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0
  */
+
 namespace Colaphp\Session\driver;
 
-use SessionHandlerInterface;
-
-class Memcached implements SessionHandlerInterface
+class Memcached implements \SessionHandlerInterface
 {
 	protected $handler;
 
@@ -17,8 +17,8 @@ class Memcached implements SessionHandlerInterface
 		'expire' => 3600, // session有效期
 		'timeout' => 0, // 连接超时时间（单位：毫秒）
 		'session_name' => '', // memcache key前缀
-		'username' => '', //账号
-		'password' => '', //密码
+		'username' => '', // 账号
+		'password' => '', // 密码
 	];
 
 	public function __construct($config = [])
@@ -56,7 +56,7 @@ class Memcached implements SessionHandlerInterface
 		// 建立连接
 		$servers = [];
 		foreach ((array) $hosts as $i => $host) {
-			$servers[] = [$host, (isset($ports[$i]) ? $ports[$i] : $ports[0]), 1];
+			$servers[] = [$host, isset($ports[$i]) ? $ports[$i] : $ports[0], 1];
 		}
 
 		$this->handler->addServers($servers);
