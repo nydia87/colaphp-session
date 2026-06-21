@@ -1,8 +1,7 @@
 <?php
-
 /**
- * @contact  nydia87 <349196713@qq.com>
- * @license  http://www.apache.org/licenses/LICENSE-2.0
+ * @author: nydia87 <349196713@qq.com>
+ * @description:
  */
 
 namespace Colaphp\Session\driver;
@@ -28,8 +27,9 @@ class Memcached implements \SessionHandlerInterface
 
 	/**
 	 * 打开Session.
+	 *
 	 * @param string $savePath
-	 * @param mixed $sessName
+	 * @param mixed  $sessName
 	 */
 	public function open($savePath, $sessName)
 	{
@@ -61,7 +61,7 @@ class Memcached implements \SessionHandlerInterface
 
 		$this->handler->addServers($servers);
 
-		if ($this->config['username'] != '') {
+		if ('' != $this->config['username']) {
 			$this->handler->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
 			$this->handler->setSaslAuthData($this->config['username'], $this->config['password']);
 		}
@@ -83,6 +83,7 @@ class Memcached implements \SessionHandlerInterface
 
 	/**
 	 * 读取Session.
+	 *
 	 * @param string $sessID
 	 */
 	public function read($sessID)
@@ -92,8 +93,10 @@ class Memcached implements \SessionHandlerInterface
 
 	/**
 	 * 写入Session.
+	 *
 	 * @param string $sessID
 	 * @param string $sessData
+	 *
 	 * @return bool
 	 */
 	public function write($sessID, $sessData)
@@ -103,7 +106,9 @@ class Memcached implements \SessionHandlerInterface
 
 	/**
 	 * 删除Session.
+	 *
 	 * @param string $sessID
+	 *
 	 * @return bool
 	 */
 	public function destroy($sessID)
@@ -113,7 +118,9 @@ class Memcached implements \SessionHandlerInterface
 
 	/**
 	 * Session 垃圾回收.
+	 *
 	 * @param string $sessMaxLifeTime
+	 *
 	 * @return true
 	 */
 	public function gc($sessMaxLifeTime)

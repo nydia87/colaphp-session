@@ -1,8 +1,7 @@
 <?php
-
 /**
- * @contact  nydia87 <349196713@qq.com>
- * @license  http://www.apache.org/licenses/LICENSE-2.0
+ * @author: nydia87 <349196713@qq.com>
+ * @description:
  */
 use Colaphp\Session\Session;
 
@@ -25,8 +24,8 @@ if (! function_exists('session')) {
 	 * Session管理.
 	 *
 	 * @param array|string $name
-	 * @param mixed $value
-	 * @param string $prefix
+	 * @param mixed        $value
+	 * @param string       $prefix
 	 */
 	function session($name, $value = '', $prefix = null)
 	{
@@ -34,8 +33,8 @@ if (! function_exists('session')) {
 			Session::getInstance($name);
 		} elseif (is_null($name)) { // 清除
 			Session::getInstance()->clear($prefix);
-		} elseif ($value === '') {// 判断或获取
-			return strpos($name, '?') === 0 ? Session::getInstance()->has(substr($name, 1), $prefix) : Session::getInstance()->get($name, $prefix);
+		} elseif ('' === $value) {// 判断或获取
+			return 0 === strpos($name, '?') ? Session::getInstance()->has(substr($name, 1), $prefix) : Session::getInstance()->get($name, $prefix);
 		} elseif (is_null($value)) {// 删除
 			return Session::getInstance()->delete($name, $prefix);
 		} else {// 设置

@@ -1,8 +1,7 @@
 <?php
-
 /**
- * @contact  nydia87 <349196713@qq.com>
- * @license  http://www.apache.org/licenses/LICENSE-2.0
+ * @author: nydia87 <349196713@qq.com>
+ * @description:
  */
 
 namespace Colaphp\Session;
@@ -11,48 +10,56 @@ class Session
 {
 	/**
 	 * 对象实例.
+	 *
 	 * @var Session
 	 */
 	protected static $instance;
 
 	/**
 	 * 配置参数.
+	 *
 	 * @var array
 	 */
 	protected $config = [];
 
 	/**
 	 * 前缀
+	 *
 	 * @var string
 	 */
 	protected $prefix = '';
 
 	/**
 	 * 是否初始化.
+	 *
 	 * @var bool
 	 */
 	protected $init;
 
 	/**
 	 * 锁驱动.
+	 *
 	 * @var object
 	 */
 	protected $lockDriver;
 
 	/**
 	 * 锁key.
+	 *
 	 * @var string
 	 */
 	protected $sessKey = 'PHPSESSID';
 
 	/**
 	 * 锁超时时间.
+	 *
 	 * @var int
 	 */
 	protected $lockTimeout = 3;
 
 	/**
 	 * 是否启用锁机制.
+	 *
 	 * @var bool
 	 */
 	protected $lock = false;
@@ -69,6 +76,7 @@ class Session
 	 * 获取当前实例.
 	 *
 	 * @param array $config
+	 *
 	 * @return object
 	 */
 	public static function getInstance($config = [])
@@ -77,19 +85,22 @@ class Session
 			static::$instance = new self();
 			static::$instance->init($config);
 		}
+
 		return static::$instance;
 	}
 
 	/**
 	 * 设置或者获取session作用域（前缀）.
+	 *
 	 * @param string $prefix
+	 *
 	 * @return string|void
 	 */
 	public function prefix($prefix = '')
 	{
 		empty($this->init) && $this->boot();
 
-		if (empty($prefix) && $prefix !== null) {
+		if (empty($prefix) && null !== $prefix) {
 			return $this->prefix;
 		}
 		$this->prefix = $prefix;
@@ -121,6 +132,7 @@ class Session
 
 	/**
 	 * session初始化.
+	 *
 	 * @throws RuntimeException
 	 */
 	public function init(array $config = [])
@@ -133,7 +145,7 @@ class Session
 		}
 
 		// 启动session
-		if (! empty($config['auto_start']) && session_status() != PHP_SESSION_ACTIVE) {
+		if (! empty($config['auto_start']) && PHP_SESSION_ACTIVE != session_status()) {
 			ini_set('session.auto_start', 0);
 			$isDoStart = true;
 		}
@@ -191,7 +203,7 @@ class Session
 
 		if (! empty($config['type'])) {
 			// 读取session驱动
-			$class = strpos($config['type'], '\\') !== false ? $config['type'] : '\Colaphp\Session\driver\\' . ucwords($config['type']);
+			$class = false !== strpos($config['type'], '\\') ? $config['type'] : '\Colaphp\Session\driver\\' . ucwords($config['type']);
 
 			// 检查驱动类
 			if (! class_exists($class) || ! session_set_save_handler(new $class($config))) {
@@ -217,8 +229,8 @@ class Session
 			$this->init();
 		}
 
-		if ($this->init === false) {
-			if (session_status() != PHP_SESSION_ACTIVE) {
+		if (false === $this->init) {
+			if (PHP_SESSION_ACTIVE != session_status()) {
 				$this->start();
 			}
 			$this->init = true;
@@ -227,8 +239,9 @@ class Session
 
 	/**
 	 * session设置.
-	 * @param string $name session名称
-	 * @param mixed $value session值
+	 *
+	 * @param string      $name   session名称
+	 * @param mixed       $value  session值
 	 * @param null|string $prefix 作用域（前缀）
 	 */
 	public function set($name, $value, $prefix = null)
@@ -258,8 +271,10 @@ class Session
 
 	/**
 	 * session获取.
-	 * @param string $name session名称
+	 *
+	 * @param string      $name   session名称
 	 * @param null|string $prefix 作用域（前缀）
+	 *
 	 * @return mixed
 	 */
 	public function get($name = '', $prefix = null)
@@ -272,7 +287,7 @@ class Session
 
 		$value = $prefix ? (! empty($_SESSION[$prefix]) ? $_SESSION[$prefix] : []) : $_SESSION;
 
-		if ($name != '') {
+		if ('' != $name) {
 			$name = explode('.', $name);
 
 			foreach ($name as $val) {
@@ -292,8 +307,10 @@ class Session
 
 	/**
 	 * session获取并删除.
-	 * @param string $name session名称
+	 *
+	 * @param string      $name   session名称
 	 * @param null|string $prefix 作用域（前缀）
+	 *
 	 * @return mixed
 	 */
 	public function pull($name, $prefix = null)
@@ -302,14 +319,16 @@ class Session
 
 		if ($result) {
 			$this->delete($name, $prefix);
+
 			return $result;
 		}
 	}
 
 	/**
 	 * session设置 下一次请求有效.
-	 * @param string $name session名称
-	 * @param mixed $value session值
+	 *
+	 * @param string $name  session名称
+	 * @param mixed  $value session值
 	 */
 	public function flash($name, $value)
 	{
@@ -346,8 +365,9 @@ class Session
 
 	/**
 	 * 删除session数据.
-	 * @param array|string $name session名称
-	 * @param null|string $prefix 作用域（前缀）
+	 *
+	 * @param array|string $name   session名称
+	 * @param null|string  $prefix 作用域（前缀）
 	 */
 	public function delete($name, $prefix = null)
 	{
@@ -377,6 +397,7 @@ class Session
 
 	/**
 	 * 清空session数据.
+	 *
 	 * @param null|string $prefix 作用域（前缀）
 	 */
 	public function clear($prefix = null)
@@ -393,8 +414,10 @@ class Session
 
 	/**
 	 * 判断session数据.
-	 * @param string $name session名称
+	 *
+	 * @param string      $name   session名称
 	 * @param null|string $prefix
+	 *
 	 * @return bool
 	 */
 	public function has($name, $prefix = null)
@@ -418,8 +441,9 @@ class Session
 
 	/**
 	 * 添加数据到一个session数组.
+	 *
 	 * @param string $key
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	public function push($key, $value)
 	{
@@ -462,6 +486,7 @@ class Session
 
 	/**
 	 * 重新生成session_id.
+	 *
 	 * @param bool $delete 是否删除关联会话文件
 	 */
 	public function regenerate($delete = false)
@@ -488,7 +513,7 @@ class Session
 
 		if (! empty($config['type']) && isset($config['use_lock']) && $config['use_lock']) {
 			// 读取session驱动
-			$class = strpos($config['type'], '\\') !== false ? $config['type'] : '\Colaphp\Session\driver\\' . ucwords($config['type']);
+			$class = false !== strpos($config['type'], '\\') ? $config['type'] : '\Colaphp\Session\driver\\' . ucwords($config['type']);
 
 			// 检查驱动类及类中是否存在 lock 和 unlock 函数
 			if (class_exists($class) && method_exists($class, 'lock') && method_exists($class, 'unlock')) {
@@ -517,7 +542,7 @@ class Session
 
 		$this->initDriver();
 
-		if ($this->lockDriver !== null && method_exists($this->lockDriver, 'lock')) {
+		if (null !== $this->lockDriver && method_exists($this->lockDriver, 'lock')) {
 			$t = time();
 			// 使用 session_id 作为互斥条件，即只对同一 session_id 的会话互斥。第一次请求没有 session_id
 			$sessID = isset($_COOKIE[$this->sessKey]) ? $_COOKIE[$this->sessKey] : '';

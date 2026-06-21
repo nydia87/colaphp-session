@@ -1,8 +1,7 @@
 <?php
-
 /**
- * @contact  nydia87 <349196713@qq.com>
- * @license  http://www.apache.org/licenses/LICENSE-2.0
+ * @author: nydia87 <349196713@qq.com>
+ * @description:
  */
 
 namespace Colaphp\Session\driver;
@@ -32,9 +31,12 @@ class Redis implements \SessionHandlerInterface
 
 	/**
 	 * 打开Session.
+	 *
 	 * @param string $savePath
-	 * @param mixed $sessName
+	 * @param mixed  $sessName
+	 *
 	 * @return bool
+	 *
 	 * @throws Exception
 	 */
 	public function open($savePath, $sessName)
@@ -46,11 +48,11 @@ class Redis implements \SessionHandlerInterface
 			$func = $this->config['persistent'] ? 'pconnect' : 'connect';
 			$this->handler->{$func}($this->config['host'], $this->config['port'], $this->config['timeout']);
 
-			if ($this->config['password'] != '') {
+			if ('' != $this->config['password']) {
 				$this->handler->auth($this->config['password']);
 			}
 
-			if ($this->config['select'] != 0) {
+			if (0 != $this->config['select']) {
 				$this->handler->select($this->config['select']);
 			}
 		} elseif (class_exists('\Predis\Client')) {
@@ -83,7 +85,9 @@ class Redis implements \SessionHandlerInterface
 
 	/**
 	 * 读取Session.
+	 *
 	 * @param string $sessID
+	 *
 	 * @return string
 	 */
 	public function read($sessID)
@@ -93,8 +97,10 @@ class Redis implements \SessionHandlerInterface
 
 	/**
 	 * 写入Session.
+	 *
 	 * @param string $sessID
 	 * @param string $sessData
+	 *
 	 * @return bool
 	 */
 	public function write($sessID, $sessData)
@@ -110,7 +116,9 @@ class Redis implements \SessionHandlerInterface
 
 	/**
 	 * 删除Session.
+	 *
 	 * @param string $sessID
+	 *
 	 * @return bool
 	 */
 	public function destroy($sessID)
@@ -120,7 +128,9 @@ class Redis implements \SessionHandlerInterface
 
 	/**
 	 * Session 垃圾回收.
+	 *
 	 * @param string $sessMaxLifeTime
+	 *
 	 * @return bool
 	 */
 	public function gc($sessMaxLifeTime)
@@ -130,13 +140,15 @@ class Redis implements \SessionHandlerInterface
 
 	/**
 	 * Redis Session 驱动的加锁机制.
-	 * @param string $sessID 用于加锁的sessID
-	 * @param int $timeout 默认过期时间
+	 *
+	 * @param string $sessID  用于加锁的sessID
+	 * @param int    $timeout 默认过期时间
+	 *
 	 * @return bool
 	 */
 	public function lock($sessID, $timeout = 10)
 	{
-		if ($this->handler == null) {
+		if (null == $this->handler) {
 			$this->open('', '');
 		}
 
@@ -146,6 +158,7 @@ class Redis implements \SessionHandlerInterface
 		if ($isLock) {
 			// 设置过期时间，防止死任务的出现
 			$this->handler->expire($lockKey, $timeout);
+
 			return true;
 		}
 
@@ -154,11 +167,12 @@ class Redis implements \SessionHandlerInterface
 
 	/**
 	 * Redis Session 驱动的解锁机制.
+	 *
 	 * @param string $sessID 用于解锁的sessID
 	 */
 	public function unlock($sessID)
 	{
-		if ($this->handler == null) {
+		if (null == $this->handler) {
 			$this->open('', '');
 		}
 
